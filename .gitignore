@@ -1,0 +1,37 @@
+# Dependencies & Package Managers
+node_modules/
+.pnp
+.pnp.js
+
+# Frontend Build Output
+rathinam-frontend/dist/
+dist/
+
+# Maven / Java Build Output
+rathinam-backend/target/
+target/
+
+# Logs & Environment Files
+*.log
+.env
+.env.*
+!.env.example
+
+# Local Archive Files
+*.zip
+
+# IDE & Editor Files
+.vscode/
+.idea/
+*.iml
+*.iws
+*.ipr
+.settings/
+.classpath
+.project
+
+# OS Generated Files
+.DS_Store
+.DS_Store?
+ehthumbs.db
+Thumbs.db
