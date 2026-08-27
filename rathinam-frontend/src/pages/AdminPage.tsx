@@ -168,7 +168,12 @@ export const AdminPage: React.FC = () => {
     e.preventDefault();
     setError(null);
     try {
-      await achievementApi.issueCertificate(newCert.memberId, newCert.title, newCert.certificateType);
+      await achievementApi.issueCertificate({
+        memberId: newCert.memberId,
+        title: newCert.title,
+        certificateType: newCert.certificateType,
+        description: newCert.title
+      });
       setSuccessMsg('Certificate issued successfully!');
       setIsCertModalOpen(false);
       setNewCert({ memberId: '', title: '', certificateType: 'ACHIEVEMENT' });

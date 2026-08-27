@@ -9,8 +9,9 @@ import { meetingApi } from '../api/meetingApi';
 import { rankingApi } from '../api/rankingApi';
 import { analyticsApi } from '../api/analyticsApi';
 import { achievementApi } from '../api/achievementApi';
-import { Meeting, MemberRanking, MemberAnalytics, Achievement, Certificate } from '../types';
-import { Trophy, Calendar, Award, CheckCircle2, ChevronRight, Star } from 'lucide-react';
+import { pointApi } from '../api/pointApi';
+import { Meeting, MemberRanking, MemberAnalytics, Achievement, Certificate, MemberPointsSummary } from '../types';
+import { Trophy, Calendar, Award, CheckCircle2, ChevronRight, Star, History } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export const DashboardPage: React.FC = () => {
@@ -25,6 +26,7 @@ export const DashboardPage: React.FC = () => {
   const [meetings, setMeetings] = useState<Meeting[]>([]);
   const [achievements, setAchievements] = useState<Achievement[]>([]);
   const [certificates, setCertificates] = useState<Certificate[]>([]);
+  const [pointsSummary, setPointsSummary] = useState<MemberPointsSummary | null>(null);
 
   useEffect(() => {
     const loadDashboardData = async () => {
@@ -35,17 +37,19 @@ export const DashboardPage: React.FC = () => {
         setMeetings(meetingsRes.content);
 
         if (user?.memberId) {
-          const [rankRes, analyticsRes, achRes, certRes] = await Promise.all([
+          const [rankRes, analyticsRes, achRes, certRes, pointsRes] = await Promise.all([
             rankingApi.getMemberRank(user.memberId).catch(() => null),
             analyticsApi.getMemberAnalytics(user.memberId).catch(() => null),
             achievementApi.getMemberAchievements(user.memberId).catch(() => []),
             achievementApi.getMemberCertificates(user.memberId).catch(() => []),
+            pointApi.getMemberPointEvents(user.memberId).catch(() => null),
           ]);
 
           setRankInfo(rankRes);
           setAnalytics(analyticsRes);
           setAchievements(achRes);
           setCertificates(certRes);
+          setPointsSummary(pointsRes);
         }
       } catch (err: any) {
         setError(err.message || 'Failed to load dashboard data');
@@ -105,7 +109,7 @@ export const DashboardPage: React.FC = () => {
             <span>Leaderboard Rank</span>
           </div>
           <div className="card-value">
-            #{rankInfo?.rank || analytics?.rank || 'N/A'}
+            #{rankInfo?.rank || analytics?.currentRank || 'N/A'}
           </div>
           <div style={{ fontSize: '0.8rem', color: '#64748B', marginTop: 4 }}>
             {rankInfo ? `${rankInfo.totalPoints} Total Points` : 'Monthly Standings'}
@@ -131,7 +135,7 @@ export const DashboardPage: React.FC = () => {
             <span>Attendance Rate</span>
           </div>
           <div className="card-value" style={{ color: '#60A5FA' }}>
-            {analytics ? `${Math.round(analytics.attendanceRate)}%` : '100%'}
+            {analytics ? `${Math.round(analytics.attendancePercentage)}%` : '100%'}
           </div>
           <div style={{ fontSize: '0.8rem', color: '#64748B', marginTop: 4 }}>
             Meeting Participation
@@ -257,6 +261,83 @@ export const DashboardPage: React.FC = () => {
           </div>
         </Card>
       </div>
+
+      {/* Points History & Audit Log Section */}
+      <Card style={{ marginTop: 24 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18, flexWrap: 'wrap', gap: 12 }}>
+          <div>
+            <h3 style={{ fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <History size={20} color="#10B981" />
+              <span>Points History & Event Log</span>
+            </h3>
+            <p style={{ fontSize: '0.85rem', color: '#94A3B8' }}>
+              Detailed audit trail of all attendance and meeting role points earned.
+            </p>
+          </div>
+          {pointsSummary?.totalPoints !== undefined && (
+            <Badge variant="in_progress">
+              Total Points: {pointsSummary.totalPoints} pts
+            </Badge>
+          )}
+        </div>
+
+        <div className="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Points</th>
+                <th>Reason / Activity</th>
+                <th>Source Type</th>
+                <th>Meeting</th>
+                <th>Date & Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              {(pointsSummary?.events?.content || []).map((ev) => (
+                <tr key={ev.id}>
+                  <td style={{ fontWeight: 800, color: ev.points >= 0 ? '#10B981' : '#EF4444', fontSize: '1rem' }}>
+                    {ev.points >= 0 ? `+${ev.points}` : ev.points} pts
+                  </td>
+                  <td style={{ fontWeight: 600, color: '#F2DF74' }}>
+                    {ev.reason || ev.pointRuleName || ev.pointRuleCode || 'Point Award'}
+                  </td>
+                  <td>
+                    <Badge variant={
+                      ev.sourceType === 'ATTENDANCE' ? 'completed' :
+                      ev.sourceType === 'ROLE_ASSIGNMENT' ? 'in_progress' : 'default'
+                    }>
+                      {ev.sourceType || 'MANUAL'}
+                    </Badge>
+                  </td>
+                  <td>
+                    {ev.meetingNumber ? (
+                      <span
+                        style={{ color: '#60A5FA', cursor: 'pointer', textDecoration: 'underline' }}
+                        onClick={() => ev.meetingId && navigate(`/meetings/${ev.meetingId}`)}
+                      >
+                        Meeting #{ev.meetingNumber}
+                      </span>
+                    ) : (
+                      <span style={{ color: '#64748B' }}>-</span>
+                    )}
+                  </td>
+                  <td style={{ fontSize: '0.85rem', color: '#94A3B8' }}>
+                    {ev.createdAt ? new Date(ev.createdAt).toLocaleString() : '-'}
+                  </td>
+                </tr>
+              ))}
+
+              {(!pointsSummary?.events?.content || pointsSummary.events.content.length === 0) && (
+                <tr>
+                  <td colSpan={5} style={{ textAlign: 'center', color: '#64748B', padding: 24 }}>
+                    No point events logged yet. Points are awarded automatically when you attend meetings or perform meeting roles!
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </Card>
     </AppLayout>
   );
 };

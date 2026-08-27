@@ -1,5 +1,5 @@
 import { request } from './client';
-import { PointEvent, PointRule } from '../types';
+import { PointEvent, PointRule, MemberPointsSummary } from '../types';
 
 export const pointApi = {
   getPointRules: () =>
@@ -12,7 +12,7 @@ export const pointApi = {
     }),
 
   getMemberPointEvents: (memberId: string) =>
-    request<{ totalPoints: number; events: PointEvent[] }>(`/members/${memberId}/points`, { method: 'GET' }),
+    request<MemberPointsSummary>(`/members/${memberId}/points`, { method: 'GET' }),
 
   awardManualPoints: (memberId: string, pointRuleId: string, meetingId?: string, reason?: string) =>
     request<PointEvent>('/points/manual', {

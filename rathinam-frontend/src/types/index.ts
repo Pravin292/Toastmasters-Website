@@ -113,10 +113,29 @@ export interface PointRule {
 export interface PointEvent {
   id: string;
   memberId: string;
+  memberDisplayName?: string;
+  memberEmail?: string;
   meetingId?: string;
+  meetingNumber?: number;
+  pointRuleId?: string;
+  pointRuleCode?: string;
+  pointRuleName?: string;
   points: number;
-  reason: string;
+  reason?: string;
+  sourceType?: string;
   createdAt: string;
+}
+
+export interface MemberPointsSummary {
+  memberId: string;
+  memberDisplayName?: string;
+  memberEmail?: string;
+  totalPoints: number;
+  events?: {
+    content: PointEvent[];
+    totalElements?: number;
+    totalPages?: number;
+  };
 }
 
 export interface RankingEntry {
@@ -159,30 +178,94 @@ export interface MemberRanking {
 
 export interface Achievement {
   id: string;
-  code: string;
-  name: string;
+  memberId?: string;
+  memberDisplayName?: string;
+  achievementDefinitionId?: string;
+  achievementCode?: string;
+  achievementName?: string;
+  name?: string;
+  description?: string;
+  icon?: string;
+  category?: string;
+  earnedAt?: string;
+  meetingId?: string;
+  reason?: string;
+}
+
+export interface Badge {
+  achievementId: string;
+  memberId: string;
+  badgeName: string;
   description: string;
   icon: string;
-  earnedAt?: string;
+  category: string;
+  earnedAt: string;
 }
 
 export interface Certificate {
   id: string;
   certificateNumber: string;
   memberId: string;
-  title: string;
+  memberDisplayName?: string;
   certificateType: string;
+  title: string;
+  description?: string;
   issuedDate: string;
+  achievementId?: string;
+  status?: string;
+}
+
+export interface IssueCertificateRequest {
+  memberId: string;
+  certificateType: string;
+  title: string;
+  description: string;
+  achievementId?: string;
+  customCertificateNumber?: string;
 }
 
 export interface MemberAnalytics {
   memberId: string;
-  memberName: string;
+  displayName: string;
+  email: string;
+  totalMeetingsAttended: number;
+  attendancePercentage: number;
+  totalRolesPerformed: number;
   totalPoints: number;
-  rank: number;
-  attendanceRate: number;
-  totalRolesPlayed: number;
-  achievementsCount: number;
+  currentRank?: number;
+  achievementsEarned: number;
+}
+
+export interface MemberMonthlyPerformance {
+  year: number;
+  month: number;
+  points: number;
+  attendanceCount: number;
+  rolesCount: number;
+}
+
+export interface ClubOverviewAnalytics {
+  totalMembers: number;
+  activeMembers: number;
+  totalMeetings: number;
+  totalAttendanceRecords: number;
+  averageAttendancePerMeeting: number;
+  totalPointsAwarded: number;
+  totalAchievementsEarned: number;
+  currentMonthlyChampion?: MonthlyChampion | null;
+}
+
+export interface MonthlyAnalytics {
+  year: number;
+  month: number;
+  totalMeetings: number;
+  totalAttendance: number;
+  averageAttendance: number;
+  totalPointsAwarded: number;
+  activeMembersCount: number;
+  topPerformers?: RankingEntry[];
+  monthlyChampion?: MonthlyChampion | null;
+  achievementsEarned: number;
 }
 
 export interface AiSummary {
