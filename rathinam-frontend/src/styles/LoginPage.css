@@ -1,0 +1,685 @@
+/* ==========================================================================
+   RATHINAM TOASTMASTERS CLUB - CORPORATE MINIMAL AUTHENTICATION STYLES
+   Dark Charcoal Outer Frame + Light Card + Sliding Panel
+   ========================================================================== */
+
+.auth-page-container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  background-color: #18181B; /* Dark Charcoal Outer Background */
+  background-image: radial-gradient(circle at 50% 30%, #27272A 0%, #18181B 75%);
+  padding: 24px;
+  perspective: 1200px;
+  font-family: var(--font-family, 'Inter', system-ui, -apple-system, sans-serif);
+}
+
+/* --------------------------------------------------------------------------
+   WATERMARK & CHARCOAL AMBIENT BACKGROUND
+   -------------------------------------------------------------------------- */
+
+/* Toastmasters International Logo Watermark & Corner Badge */
+.auth-corner-logo {
+  position: absolute;
+  top: 24px;
+  right: 32px;
+  height: 92px;
+  width: auto;
+  object-fit: contain;
+  z-index: 50;
+  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.4));
+  transition: all 0.25s ease;
+}
+
+.auth-watermark-bg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 720px;
+  max-width: 90vw;
+  opacity: 0.06;
+  filter: grayscale(40%) brightness(1.2);
+  pointer-events: none;
+  z-index: 1;
+  user-select: none;
+}
+
+.auth-bg-grid {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: radial-gradient(circle at 50% 50%, black 40%, transparent 85%);
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, black 40%, transparent 85%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* --------------------------------------------------------------------------
+   HEADER BRANDING WITH RATHINAM LOGO (Attached Image 1)
+   -------------------------------------------------------------------------- */
+
+.auth-top-header {
+  position: relative;
+  z-index: 20;
+  text-align: center;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Rathinam College Logo Image (Attached Image 1) */
+.auth-rathinam-logo {
+  height: 54px;
+  width: auto;
+  max-width: 340px;
+  object-fit: contain;
+  margin-bottom: 12px;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.3));
+  transition: transform 0.25s ease;
+}
+
+.auth-header-title-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.auth-header-club-name {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #F8FAFC; /* Crisp White Text for Dark Background */
+  letter-spacing: -0.01em;
+}
+
+.auth-header-district-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #E2E8F0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* --------------------------------------------------------------------------
+   SPLIT AUTHENTICATION CARD & SLIDING OVERLAY (LIGHT CARD ON DARK OUTER BG)
+   -------------------------------------------------------------------------- */
+
+.auth-card-wrapper {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 920px;
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: authCardEntrance 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes authCardEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.auth-split-card {
+  position: relative;
+  width: 100%;
+  min-height: 580px;
+  background: #FFFFFF; /* Pure White Light Card */
+  border-radius: 24px;
+  border: 1px solid #E4E4E7;
+  box-shadow: 
+    0 25px 60px -15px rgba(0, 0, 0, 0.5),
+    0 0 1px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  display: flex;
+}
+
+/* Subtle Top Accent Line */
+.auth-split-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #1E293B, #475569, #0F172A);
+  z-index: 150;
+}
+
+/* --------------------------------------------------------------------------
+   FORM PANELS CONTAINER (LIGHT CARD INNER)
+   -------------------------------------------------------------------------- */
+
+.auth-forms-container {
+  position: relative;
+  width: 100%;
+  min-height: 580px;
+  display: flex;
+}
+
+.auth-form-panel {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  padding: 40px 36px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: all 0.65s cubic-bezier(0.65, 0, 0.35, 1);
+  background: #FFFFFF;
+}
+
+.auth-form-panel.sign-in-panel {
+  left: 0;
+  z-index: 2;
+  opacity: 1;
+}
+
+.auth-form-panel.sign-up-panel {
+  right: 0;
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Active State Transformations when Signup Mode is Active */
+.auth-split-card.sign-up-mode .sign-in-panel {
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1;
+  transform: translateX(-15%);
+}
+
+.auth-split-card.sign-up-mode .sign-up-panel {
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 2;
+  transform: translateX(0%);
+}
+
+/* --------------------------------------------------------------------------
+   SLIDING OVERLAY PROMOTIONAL PANEL (DARK CORPORATE CHARCOAL)
+   -------------------------------------------------------------------------- */
+
+.auth-overlay-wrapper {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 100;
+  border-radius: 0 23px 23px 0;
+  transition: transform 0.65s cubic-bezier(0.65, 0, 0.35, 1), border-radius 0.65s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.auth-split-card.sign-up-mode .auth-overlay-wrapper {
+  transform: translateX(-100%);
+  border-radius: 23px 0 0 23px;
+}
+
+.auth-overlay {
+  position: relative;
+  width: 200%;
+  height: 100%;
+  left: -100%;
+  background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
+  color: #FFFFFF;
+  transform: translateX(0);
+  transition: transform 0.65s cubic-bezier(0.65, 0, 0.35, 1);
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.3);
+}
+
+.auth-split-card.sign-up-mode .auth-overlay {
+  transform: translateX(50%);
+}
+
+/* Inner Overlay Panels */
+.overlay-panel {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 36px;
+  text-align: center;
+  transition: transform 0.65s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.65s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.overlay-panel.overlay-left {
+  left: 0;
+  transform: translateX(-20%);
+  opacity: 0;
+}
+
+.overlay-panel.overlay-right {
+  right: 0;
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.auth-split-card.sign-up-mode .overlay-left {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.auth-split-card.sign-up-mode .overlay-right {
+  transform: translateX(20%);
+  opacity: 0;
+}
+
+.overlay-emblem-badge {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #F8FAFC;
+  margin-bottom: 18px;
+}
+
+.overlay-title {
+  font-size: 1.85rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 10px;
+  color: #FFFFFF;
+}
+
+.overlay-text {
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: #94A3B8;
+  max-width: 310px;
+  margin-bottom: 26px;
+}
+
+.overlay-toggle-btn {
+  padding: 11px 32px;
+  border-radius: 30px;
+  background: transparent;
+  border: 2px solid #FFFFFF;
+  color: #FFFFFF;
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.overlay-toggle-btn:hover {
+  background: #FFFFFF;
+  color: #0F172A;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+}
+
+.overlay-toggle-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* --------------------------------------------------------------------------
+   FORM HEADINGS & INPUTS (MINIMAL CORPORATE LIGHT CARD)
+   -------------------------------------------------------------------------- */
+
+.auth-header {
+  margin-bottom: 22px;
+}
+
+.auth-title {
+  font-size: 1.7rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #0F172A; /* Deep Slate Charcoal */
+  margin-bottom: 4px;
+}
+
+.auth-subtitle {
+  color: #64748B; /* Slate Gray */
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.auth-form-row {
+  display: flex;
+  gap: 12px;
+}
+
+.auth-form-row .auth-field-group {
+  flex: 1;
+}
+
+.auth-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.auth-field-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #334155;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.auth-input-relative {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.auth-input-icon {
+  position: absolute;
+  left: 14px;
+  color: #94A3B8;
+  pointer-events: none;
+  transition: color 0.2s ease, transform 0.2s ease;
+  z-index: 2;
+}
+
+.auth-input {
+  width: 100%;
+  height: 44px;
+  padding: 0 40px 0 42px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  color: #0F172A;
+  font-size: 0.92rem;
+  font-family: inherit;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.auth-input::placeholder {
+  color: #94A3B8;
+}
+
+.auth-input:hover {
+  border-color: #CBD5E1;
+  background: #FFFFFF;
+}
+
+.auth-input:focus {
+  border-color: #0F172A; /* Corporate Dark Slate Focus */
+  background: #FFFFFF;
+  box-shadow: 
+    0 0 0 3px rgba(15, 23, 42, 0.1),
+    0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.auth-input:focus + .auth-input-icon,
+.auth-input-relative:focus-within .auth-input-icon {
+  color: #0F172A;
+  transform: scale(1.05);
+}
+
+.auth-toggle-pw {
+  position: absolute;
+  right: 10px;
+  background: transparent;
+  border: none;
+  color: #94A3B8;
+  padding: 6px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease, background 0.2s ease;
+  z-index: 2;
+}
+
+.auth-toggle-pw:hover {
+  color: #0F172A;
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.auth-toggle-pw:focus-visible {
+  outline: 2px solid #0F172A;
+  outline-offset: 1px;
+}
+
+/* Error Banner Alert */
+.auth-error-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 14px;
+  background: #FEF2F2;
+  border: 1px solid #FCA5A5;
+  border-radius: 10px;
+  color: #991B1B;
+  font-size: 0.84rem;
+  line-height: 1.35;
+  animation: authShake 0.4s ease-in-out;
+}
+
+@keyframes authShake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px); }
+}
+
+/* Primary Corporate Submit Button */
+.auth-submit-btn {
+  position: relative;
+  width: 100%;
+  height: 46px;
+  margin-top: 4px;
+  border: none;
+  border-radius: 10px;
+  background: #0F172A; /* Corporate Charcoal */
+  color: #FFFFFF;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.25);
+  transition: all 0.22s ease;
+}
+
+.auth-submit-btn:hover:not(:disabled) {
+  background: #1E293B;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.35);
+}
+
+.auth-submit-btn:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+.auth-submit-btn:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+}
+
+.auth-submit-btn.btn-success {
+  background: #059669;
+  box-shadow: 0 4px 16px rgba(5, 150, 105, 0.3);
+}
+
+.auth-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #FFFFFF;
+  border-radius: 50%;
+  animation: authSpin 0.75s linear infinite;
+}
+
+@keyframes authSpin {
+  to { transform: rotate(360deg); }
+}
+
+.auth-footer-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: #64748B;
+  margin-top: 14px;
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE DESIGN & ACCESSIBILITY
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 840px) {
+  .auth-corner-logo {
+    position: relative;
+    top: auto;
+    right: auto;
+    height: 60px;
+    margin-bottom: 12px;
+  }
+
+  .auth-top-header {
+    margin-bottom: 18px;
+  }
+
+  .auth-rathinam-logo {
+    height: 44px;
+  }
+
+  .auth-header-club-name {
+    font-size: 1rem;
+  }
+
+  .auth-split-card {
+    flex-direction: column;
+    min-height: auto;
+  }
+
+  .auth-forms-container {
+    min-height: auto;
+    flex-direction: column;
+  }
+
+  .auth-form-panel {
+    position: relative;
+    width: 100%;
+    height: auto;
+    padding: 32px 22px;
+    left: 0 !important;
+    right: 0 !important;
+    transform: none !important;
+  }
+
+  .auth-form-panel.sign-in-panel,
+  .auth-form-panel.sign-up-panel {
+    display: none;
+  }
+
+  .auth-split-card:not(.sign-up-mode) .sign-in-panel {
+    display: flex;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .auth-split-card.sign-up-mode .sign-up-panel {
+    display: flex;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .auth-overlay-wrapper {
+    position: relative;
+    left: 0;
+    width: 100%;
+    height: auto;
+    border-radius: 0 0 23px 23px !important;
+    transform: none !important;
+    order: -1;
+  }
+
+  .auth-overlay {
+    width: 100%;
+    left: 0;
+    transform: none !important;
+  }
+
+  .overlay-panel {
+    position: relative;
+    width: 100%;
+    padding: 24px 20px;
+    transform: none !important;
+    display: none;
+  }
+
+  .auth-split-card:not(.sign-up-mode) .overlay-right {
+    display: flex;
+    opacity: 1;
+  }
+
+  .auth-split-card.sign-up-mode .overlay-left {
+    display: flex;
+    opacity: 1;
+  }
+
+  .overlay-title {
+    font-size: 1.4rem;
+  }
+
+  .overlay-text {
+    font-size: 0.86rem;
+    margin-bottom: 16px;
+  }
+
+  .overlay-toggle-btn {
+    padding: 9px 24px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-card-wrapper,
+  .auth-form-panel,
+  .auth-overlay-wrapper,
+  .auth-overlay,
+  .overlay-panel {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+}

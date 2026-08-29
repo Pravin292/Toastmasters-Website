@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import { Sidebar } from './Sidebar';
-import { Header } from './Header';
+import React from 'react';
+import { GlobalNavbar } from './GlobalNavbar';
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -8,15 +7,12 @@ interface AppLayoutProps {
 }
 
 export const AppLayout: React.FC<AppLayoutProps> = ({ children, title }) => {
-  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
-
   return (
-    <div className="app-container">
-      <Sidebar isOpen={mobileSidebarOpen} onClose={() => setMobileSidebarOpen(false)} />
-      <div className="main-content">
-        <Header onToggleMobileSidebar={() => setMobileSidebarOpen(!mobileSidebarOpen)} title={title} />
-        <main className="content-body">{children}</main>
-      </div>
+    <div style={{ minHeight: '100vh', width: '100%', backgroundColor: '#030712', color: '#F8FAFC' }}>
+      <GlobalNavbar />
+      <main style={{ maxWidth: '1380px', margin: '0 auto', padding: '24px 20px' }}>
+        {children}
+      </main>
     </div>
   );
 };

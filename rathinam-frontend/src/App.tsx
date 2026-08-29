@@ -5,9 +5,11 @@ import { LoginPage } from './pages/LoginPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { MeetingsPage } from './pages/MeetingsPage';
 import { MeetingDetailPage } from './pages/MeetingDetailPage';
+import { MembersPage } from './pages/MembersPage';
 import { LeaderboardPage } from './pages/LeaderboardPage';
 import { AchievementsPage } from './pages/AchievementsPage';
 import { AnalyticsPage } from './pages/AnalyticsPage';
+import { CertificatesPage } from './pages/CertificatesPage';
 import { NotificationsPage } from './pages/NotificationsPage';
 import { AdminPage } from './pages/AdminPage';
 import { LoadingSpinner } from './components/common/LoadingSpinner';
@@ -36,9 +38,11 @@ export const App: React.FC = () => {
           <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
           <Route path="/meetings" element={<ProtectedRoute><MeetingsPage /></ProtectedRoute>} />
           <Route path="/meetings/:id" element={<ProtectedRoute><MeetingDetailPage /></ProtectedRoute>} />
+          <Route path="/members" element={<ProtectedRoute><MembersPage /></ProtectedRoute>} />
           <Route path="/rankings" element={<ProtectedRoute><LeaderboardPage /></ProtectedRoute>} />
           <Route path="/achievements" element={<ProtectedRoute><AchievementsPage /></ProtectedRoute>} />
           <Route path="/analytics" element={<ProtectedRoute><AnalyticsPage /></ProtectedRoute>} />
+          <Route path="/certificates" element={<ProtectedRoute><CertificatesPage /></ProtectedRoute>} />
           <Route path="/notifications" element={<ProtectedRoute><NotificationsPage /></ProtectedRoute>} />
           <Route path="/admin" element={<ProtectedRoute><OfficerRoute><AdminPage /></OfficerRoute></ProtectedRoute>} />
 
