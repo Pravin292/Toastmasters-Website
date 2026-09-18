@@ -34,6 +34,7 @@ public class MeetingController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'PRESIDENT', 'OFFICER')")
     public ResponseEntity<ApiResponse<MeetingResponse>> createMeeting(@Valid @RequestBody CreateMeetingRequest request) {
         MeetingResponse response = meetingService.createMeeting(request);
         return new ResponseEntity<>(ApiResponse.success(response, "Meeting created successfully"), HttpStatus.CREATED);
@@ -52,6 +53,7 @@ public class MeetingController {
     }
 
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PRESIDENT', 'OFFICER')")
     public ResponseEntity<ApiResponse<MeetingResponse>> updateMeeting(@PathVariable UUID id, @Valid @RequestBody UpdateMeetingRequest request) {
         MeetingResponse response = meetingService.updateMeeting(id, request);
         return ResponseEntity.ok(ApiResponse.success(response, "Meeting updated successfully"));

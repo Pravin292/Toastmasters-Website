@@ -27,6 +27,7 @@ public class UpdateMeetingRequest {
     private String location;
 
     @Size(max = 500, message = "Meeting URL must not exceed 500 characters")
+    @jakarta.validation.constraints.Pattern(regexp = "^(https?://.*)?$", message = "Meeting URL must start with http:// or https://")
     private String meetingUrl;
 
     private String description;

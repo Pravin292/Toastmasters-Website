@@ -30,6 +30,12 @@ public class AuthController {
         return ResponseEntity.ok(ApiResponse.success(authResponse, "Login successful"));
     }
 
+    @PostMapping("/register")
+    public ResponseEntity<ApiResponse<AuthResponse>> register(@Valid @RequestBody com.rathinam.toastmasters.modules.auth.dto.RegisterRequest registerRequest) {
+        AuthResponse authResponse = authService.registerUser(registerRequest);
+        return new ResponseEntity<>(ApiResponse.success(authResponse, "Registration successful"), org.springframework.http.HttpStatus.CREATED);
+    }
+
     @GetMapping("/me")
     public ResponseEntity<ApiResponse<AuthResponse>> getCurrentUser(@AuthenticationPrincipal CustomUserDetails userDetails) {
         AuthResponse authResponse = new AuthResponse(
