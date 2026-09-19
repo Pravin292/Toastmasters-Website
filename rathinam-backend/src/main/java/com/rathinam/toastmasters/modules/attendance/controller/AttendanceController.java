@@ -8,6 +8,7 @@ import com.rathinam.toastmasters.modules.attendance.service.AttendanceService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +31,7 @@ public class AttendanceController {
     }
 
     @PostMapping("/meetings/{meetingId}/attendance")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PRESIDENT', 'OFFICER')")
     public ResponseEntity<ApiResponse<AttendanceResponse>> recordAttendance(
             @PathVariable UUID meetingId,
             @Valid @RequestBody CreateAttendanceRequest request) {
@@ -50,6 +52,7 @@ public class AttendanceController {
     }
 
     @PatchMapping("/attendance/{attendanceId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PRESIDENT', 'OFFICER')")
     public ResponseEntity<ApiResponse<AttendanceResponse>> updateAttendance(
             @PathVariable UUID attendanceId,
             @Valid @RequestBody UpdateAttendanceRequest request) {
