@@ -1,0 +1,10 @@
+target/
+.git/
+.gitignore
+.idea/
+*.iml
+.mvn/
+*.log
+backend-error.txt
+cp.txt
+README.md

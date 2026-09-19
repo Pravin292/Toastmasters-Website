@@ -1,0 +1,85 @@
+version: '3.8'
+
+services:
+  # ============================================================================
+  # PostgreSQL Database Service
+  # ============================================================================
+  postgres:
+    image: postgres:16-alpine
+    container_name: toastmasters-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: rathinam_toastmasters
+      POSTGRES_USER: pravin
+      POSTGRES_PASSWORD: Ratnaa@06
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pravin -d rathinam_toastmasters"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - toastmasters-network
+
+  # ============================================================================
+  # Spring Boot Backend REST API
+  # ============================================================================
+  backend:
+    build:
+      context: ./rathinam-backend
+      dockerfile: Dockerfile
+    container_name: toastmasters-backend
+    restart: unless-stopped
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/rathinam_toastmasters
+      SPRING_DATASOURCE_USERNAME: pravin
+      SPRING_DATASOURCE_PASSWORD: Ratnaa@06
+      CORS_ALLOWED_ORIGINS: "http://localhost:3000,http://127.0.0.1:3000,http://localhost"
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health | grep -q 'UP' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    networks:
+      - toastmasters-network
+
+  # ============================================================================
+  # React + Vite Frontend (Nginx)
+  # ============================================================================
+  frontend:
+    build:
+      context: ./rathinam-frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: /api/v1
+    container_name: toastmasters-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - toastmasters-network
+
+# ==============================================================================
+# Persistent Volumes & Network Definitions
+# ==============================================================================
+volumes:
+  postgres_data:
+    name: toastmasters_postgres_data
+
+networks:
+  toastmasters-network:
+    name: toastmasters_net
+    driver: bridge
