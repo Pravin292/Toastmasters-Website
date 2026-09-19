@@ -1,166 +1,265 @@
 /* ==========================================================================
-   GLOBAL NAVBAR - CLEAN SPACIOUS DARK SAAS DESIGN
-   Small Circular Profile Avatar + Integrated Notifications Dropdown
+   TOASTMASTERS EXECUTIVE NAVBAR STYLES (MATCHING REFERENCE IMAGE)
    ========================================================================== */
 
-.global-navbar-container {
+.tm-navbar-header {
   position: sticky;
   top: 0;
   z-index: 1000;
   width: 100%;
-  background: rgba(8, 14, 26, 0.88);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+  background: #FFFFFF;
+  border-bottom: 1px solid #E2E8F0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
-.global-navbar-inner {
-  max-width: 1380px;
+.tm-navbar-inner {
+  max-width: 1520px;
   margin: 0 auto;
-  height: 72px;
+  height: 70px;
   padding: 0 28px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 20px;
 }
 
-/* Brand Section */
-.global-brand {
+/* --------------------------------------------------------------------------
+   BRAND LOGO & MOTTO
+   -------------------------------------------------------------------------- */
+.tm-brand-link {
   display: flex;
   align-items: center;
   gap: 12px;
   text-decoration: none;
-  cursor: pointer;
+  flex-shrink: 0;
 }
 
-.global-brand-logo {
-  height: 38px;
+.tm-brand-logo {
+  height: 42px;
   width: auto;
   object-fit: contain;
 }
 
-.global-brand-title {
-  font-size: 1.1rem;
+.tm-brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.tm-brand-name {
+  font-family: 'Inter', -apple-system, sans-serif;
+  font-size: 0.88rem;
   font-weight: 800;
-  color: #FFFFFF;
-  letter-spacing: -0.01em;
-  font-family: var(--font-display, 'Inter', sans-serif);
-}
-
-.global-brand-tag {
-  font-size: 0.72rem;
-  font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 12px;
-  background: rgba(56, 189, 248, 0.12);
-  border: 1px solid rgba(56, 189, 248, 0.28);
-  color: #38BDF8;
-  letter-spacing: 0.04em;
+  color: #004165;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
+  line-height: 1.2;
 }
 
-/* Horizontal Nav Container */
-.global-nav-links {
+.tm-brand-motto {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: #64748B;
+  letter-spacing: 0.02em;
+}
+
+/* --------------------------------------------------------------------------
+   DESKTOP NAVIGATION LINKS
+   -------------------------------------------------------------------------- */
+.tm-nav-links {
   display: flex;
   align-items: center;
-  gap: 4px;
-  background: rgba(15, 23, 42, 0.65);
-  padding: 6px 10px;
-  border-radius: 40px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  gap: 22px;
+  height: 100%;
 }
 
-.global-nav-link {
-  display: inline-flex;
+.tm-nav-item {
+  display: flex;
   align-items: center;
   gap: 7px;
-  padding: 8px 15px;
-  border-radius: 20px;
-  color: #94A3B8;
   font-size: 0.86rem;
-  font-weight: 600;
+  font-weight: 500;
+  color: #475569;
   text-decoration: none;
-  transition: all 0.22s ease;
-  border: 1px solid transparent;
-  white-space: nowrap;
-}
-
-.global-nav-link:hover {
-  color: #F8FAFC;
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.global-nav-link.active {
-  color: #38BDF8;
-  background: rgba(56, 189, 248, 0.12);
-  border-color: rgba(56, 189, 248, 0.28);
-  box-shadow: 0 0 20px rgba(56, 189, 248, 0.18);
-}
-
-/* Top-Right Profile Control (Small Circle Only) */
-.global-profile-container {
+  height: 70px;
   position: relative;
+  transition: color 0.15s ease;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 2px;
 }
 
-.global-profile-avatar-btn {
+.tm-nav-item:hover {
+  color: #0F172A;
+  text-decoration: none;
+}
+
+.tm-nav-icon {
+  flex-shrink: 0;
+  transition: transform 0.15s ease;
+}
+
+/* Active Link Indicator - Crisp Maroon Underline as in reference */
+.tm-nav-item.active {
+  color: #77216F !important;
+  font-weight: 700;
+}
+
+.tm-nav-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3.5px;
+  background: #77216F;
+  border-radius: 3px 3px 0 0;
+}
+
+/* More Dropdown Button */
+.tm-more-container {
   position: relative;
-  width: 40px;
-  height: 40px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.tm-more-btn {
+  padding: 0 4px;
+}
+
+/* --------------------------------------------------------------------------
+   RIGHT ACTION CONTROLS (SEARCH, NOTIFICATIONS, PROFILE)
+   -------------------------------------------------------------------------- */
+.tm-navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+}
+
+.tm-action-btn {
+  background: none;
+  border: none;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #2563EB 0%, #38BDF8 100%);
-  border: 2px solid rgba(56, 189, 248, 0.4);
-  color: #FFFFFF;
-  font-weight: 800;
-  font-size: 0.95rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #475569;
   cursor: pointer;
-  transition: all 0.22s ease;
-  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+  transition: background 0.15s ease, color 0.15s ease;
 }
 
-.global-profile-avatar-btn:hover,
-.global-profile-avatar-btn:focus {
-  transform: scale(1.06);
-  border-color: #38BDF8;
-  box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
-  outline: none;
+.tm-action-btn:hover {
+  background: #F1F5F9;
+  color: #0F172A;
 }
 
-.global-avatar-badge-dot {
+/* Notification Bell with Red Badge */
+.tm-notif-container {
+  position: relative;
+}
+
+.tm-notif-btn {
+  position: relative;
+}
+
+.tm-notif-badge {
   position: absolute;
-  top: -2px;
-  right: -2px;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
+  top: 7px;
+  right: 7px;
+  width: 8px;
+  height: 8px;
   background: #EF4444;
-  border: 2px solid #080E1A;
+  border-radius: 50%;
+  border: 2px solid #FFFFFF;
 }
 
-/* Profile Dropdown Popover */
-.global-profile-dropdown {
+/* Profile Chip */
+.tm-profile-container {
+  position: relative;
+}
+
+.tm-profile-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 6px 4px 4px;
+  border-radius: 30px;
+  transition: background 0.15s ease;
+  text-align: left;
+}
+
+.tm-profile-chip:hover {
+  background: #F8FAFC;
+}
+
+.tm-profile-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #0F172A;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: -0.02em;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.tm-profile-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.tm-profile-name {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #0F172A;
+  line-height: 1.2;
+}
+
+.tm-profile-role {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: #64748B;
+  line-height: 1.2;
+}
+
+.tm-profile-caret {
+  color: #64748B;
+  margin-left: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   DROPDOWN MENUS (POPOVERS)
+   -------------------------------------------------------------------------- */
+.tm-dropdown-menu {
   position: absolute;
-  top: calc(100% + 12px);
+  top: calc(100% + 8px);
   right: 0;
-  width: 320px;
-  background: rgba(10, 16, 28, 0.96);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 20px;
-  padding: 16px;
-  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.7);
-  z-index: 1005;
-  animation: dropdownFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  min-width: 220px;
+  padding: 8px 0;
+  z-index: 1050;
+  animation: tmDropdownFadeIn 0.15s ease-out;
 }
 
-@keyframes dropdownFadeIn {
+@keyframes tmDropdownFadeIn {
   from {
     opacity: 0;
-    transform: translateY(-8px);
+    transform: translateY(-6px);
   }
   to {
     opacity: 1;
@@ -168,211 +267,258 @@
   }
 }
 
-/* Section 1: User Profile Header */
-.dropdown-user-header {
+.tm-dropdown-item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding-bottom: 14px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.dropdown-user-avatar {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #2563EB 0%, #38BDF8 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #FFFFFF;
-  font-weight: 800;
-  font-size: 1.1rem;
-  flex-shrink: 0;
-}
-
-.dropdown-user-name {
-  font-weight: 800;
-  font-size: 0.98rem;
-  color: #FFFFFF;
-  margin-bottom: 2px;
-}
-
-.dropdown-user-role-pill {
-  display: inline-block;
-  font-size: 0.68rem;
-  font-weight: 800;
-  padding: 2px 8px;
-  border-radius: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.dropdown-user-role-pill.admin {
-  background: rgba(239, 68, 68, 0.18);
-  color: #F87171;
-  border: 1px solid rgba(239, 68, 68, 0.3);
-}
-
-.dropdown-user-role-pill.officer {
-  background: rgba(245, 158, 11, 0.18);
-  color: #FBBF24;
-  border: 1px solid rgba(245, 158, 11, 0.3);
-}
-
-.dropdown-user-role-pill.member {
-  background: rgba(56, 189, 248, 0.15);
-  color: #38BDF8;
-  border: 1px solid rgba(56, 189, 248, 0.3);
-}
-
-.dropdown-user-meta {
-  padding: 10px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.dropdown-meta-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 0.8rem;
-  color: #94A3B8;
-}
-
-.dropdown-meta-val {
-  color: #E2E8F0;
-  font-weight: 600;
-}
-
-/* Section 2: Notifications Block */
-.dropdown-notifications-block {
-  padding: 12px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.dropdown-notifications-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.dropdown-notifications-title {
-  font-size: 0.82rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: #94A3B8;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.dropdown-read-all-btn {
+  gap: 10px;
+  padding: 10px 16px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #334155;
+  text-decoration: none;
   background: none;
   border: none;
-  color: #38BDF8;
-  font-size: 0.76rem;
-  font-weight: 600;
+  width: 100%;
+  text-align: left;
   cursor: pointer;
-  padding: 0;
+  transition: background 0.12s ease, color 0.12s ease;
 }
 
-.dropdown-read-all-btn:hover {
-  text-decoration: underline;
-}
-
-.dropdown-notifications-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  max-height: 180px;
-  overflow-y: auto;
-}
-
-.dropdown-notification-item {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 10px;
-  padding: 8px 10px;
-  font-size: 0.8rem;
-}
-
-.dropdown-notification-item.unread {
-  background: rgba(56, 189, 248, 0.08);
-  border-color: rgba(56, 189, 248, 0.2);
-}
-
-.dropdown-notification-title {
-  font-weight: 700;
-  color: #F8FAFC;
-  margin-bottom: 2px;
-}
-
-.dropdown-notification-msg {
-  color: #94A3B8;
-  font-size: 0.76rem;
-  line-height: 1.3;
-}
-
-.dropdown-view-all-link {
-  display: block;
-  text-align: center;
-  font-size: 0.78rem;
-  color: #38BDF8;
-  font-weight: 600;
-  margin-top: 8px;
+.tm-dropdown-item:hover {
+  background: #F8FAFC;
+  color: #0F172A;
   text-decoration: none;
 }
 
-.dropdown-view-all-link:hover {
-  text-decoration: underline;
-}
-
-/* Section 3: Logout Button */
-.dropdown-logout-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-  padding: 10px;
-  border-radius: 12px;
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.25);
-  color: #F87171;
-  font-size: 0.88rem;
-  font-weight: 700;
-  cursor: pointer;
-  margin-top: 12px;
-  transition: all 0.2s ease;
-}
-
-.dropdown-logout-btn:hover {
-  background: rgba(239, 68, 68, 0.2);
-  border-color: rgba(239, 68, 68, 0.4);
+.tm-logout-item {
   color: #EF4444;
 }
 
-/* Mobile Toggle */
-.mobile-nav-toggle {
+.tm-logout-item:hover {
+  background: #FEF2F2;
+  color: #DC2626;
+}
+
+.tm-dropdown-divider {
+  height: 1px;
+  background: #F1F5F9;
+  margin: 6px 0;
+}
+
+/* Profile Menu Header */
+.tm-profile-menu-header {
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.tm-menu-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #0F172A;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.tm-menu-name {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.tm-menu-email {
+  font-size: 0.75rem;
+  color: #64748B;
+}
+
+/* Notifications Dropdown */
+.tm-notif-dropdown {
+  width: 320px;
+}
+
+.tm-notif-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid #F1F5F9;
+}
+
+.tm-notif-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.tm-mark-read-btn {
+  font-size: 0.75rem;
+  color: #77216F;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.tm-notif-list {
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.tm-notif-item {
+  padding: 12px 16px;
+  border-bottom: 1px solid #F8FAFC;
+}
+
+.tm-notif-item:hover {
+  background: #F8FAFC;
+}
+
+.tm-notif-item-title {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #0F172A;
+}
+
+.tm-notif-item-msg {
+  font-size: 0.76rem;
+  color: #64748B;
+  margin-top: 2px;
+}
+
+.tm-notif-empty {
+  padding: 28px 16px;
+  text-align: center;
+  color: #64748B;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+}
+
+.tm-notif-footer {
+  display: block;
+  text-align: center;
+  padding: 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #77216F;
+  text-decoration: none;
+  border-top: 1px solid #F1F5F9;
+}
+
+.tm-notif-footer:hover {
+  text-decoration: underline;
+}
+
+/* --------------------------------------------------------------------------
+   SEARCH POPUP MODAL
+   -------------------------------------------------------------------------- */
+.tm-search-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 2000;
+  display: flex;
+  justify-content: center;
+  padding-top: 100px;
+}
+
+.tm-search-modal {
+  width: 90%;
+  max-width: 580px;
+  background: #FFFFFF;
+  border-radius: 16px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  border: 1px solid #E2E8F0;
+  animation: tmDropdownFadeIn 0.18s ease-out;
+}
+
+.tm-search-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.tm-search-input-wrap input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  color: #0F172A;
+  background: transparent;
+}
+
+.tm-search-close {
+  background: none;
+  border: none;
+  color: #64748B;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE DESIGN (HAMBURGER ON SMALLER SCREENS)
+   -------------------------------------------------------------------------- */
+.tm-mobile-toggle {
   display: none;
   background: none;
   border: none;
-  color: #F8FAFC;
+  color: #0F172A;
   cursor: pointer;
-  padding: 6px;
 }
 
-@media (max-width: 1100px) {
-  .global-nav-links {
+.tm-mobile-menu {
+  display: none;
+}
+
+@media (max-width: 1180px) {
+  .tm-nav-links {
     display: none;
   }
 
-  .mobile-nav-toggle {
+  .tm-mobile-toggle {
     display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .tm-mobile-menu {
+    display: flex;
+    flex-direction: column;
+    background: #FFFFFF;
+    border-top: 1px solid #E2E8F0;
+    padding: 12px 20px 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.06);
+  }
+
+  .tm-mobile-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 10px;
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: #334155;
+    text-decoration: none;
+    border-radius: 8px;
+  }
+
+  .tm-mobile-item:hover,
+  .tm-mobile-item.active {
+    background: #FDF2F8;
+    color: #77216F;
+    font-weight: 700;
   }
 }

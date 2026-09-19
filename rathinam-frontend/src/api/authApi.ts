@@ -8,14 +8,14 @@ export const authApi = {
       body: JSON.stringify({ email, password }),
     }),
 
-  register: (data: { firstName: string; lastName: string; email: string; password?: string }) =>
-    request<any>('/members', {
+  register: (data: { firstName: string; lastName: string; email: string; password?: string; pass?: string }) =>
+    request<AuthResponse>('/auth/register', {
       method: 'POST',
       body: JSON.stringify({
         firstName: data.firstName,
         lastName: data.lastName,
         email: data.email,
-        joinDate: new Date().toISOString().split('T')[0]
+        password: data.password || data.pass,
       }),
     }),
 
