@@ -147,10 +147,10 @@ export const MeetingsPage: React.FC = () => {
                       <span>{m.location}</span>
                     </div>
                   )}
-                  {m.meetingUrl && (
+                  {m.meetingUrl && /^https?:\/\//i.test(m.meetingUrl) && (
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                       <LinkIcon size={15} color="#A9B2B1" />
-                      <a href={m.meetingUrl} target="_blank" rel="noreferrer" style={{ fontSize: '0.82rem' }}>
+                      <a href={m.meetingUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.82rem' }}>
                         Online Join Link
                       </a>
                     </div>

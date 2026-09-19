@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { notificationApi } from '../../api/notificationApi';
 import { Notification } from '../../types';
@@ -7,40 +7,54 @@ import {
   LayoutDashboard, 
   Calendar, 
   Users, 
+  Mic, 
+  BookOpen, 
   Trophy, 
-  Award, 
   BarChart3, 
-  Settings, 
-  ShieldCheck, 
-  LogOut, 
+  TrendingUp, 
+  MoreHorizontal, 
+  Search, 
   Bell, 
-  Menu, 
+  ChevronDown, 
+  LogOut, 
+  ShieldCheck, 
+  Award, 
+  CheckCircle2, 
   X,
-  CheckCircle2
+  Menu
 } from 'lucide-react';
 import '../../styles/GlobalNavbar.css';
 
 export const GlobalNavbar: React.FC = () => {
   const { user, isOfficer, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const [moreDropdownOpen, setMoreDropdownOpen] = useState(false);
+  const [notificationOpen, setNotificationOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchModalOpen, setSearchModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState<number>(0);
-  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Fetch unread notifications for profile dropdown
+  const profileRef = useRef<HTMLDivElement>(null);
+  const moreRef = useRef<HTMLDivElement>(null);
+  const notifRef = useRef<HTMLDivElement>(null);
+
+  // Fetch unread notifications
   const fetchNotifications = async () => {
     try {
       const [resList, resCount] = await Promise.all([
-        notificationApi.getUnreadNotifications(0, 4).catch(() => ({ content: [] })),
+        notificationApi.getUnreadNotifications(0, 5).catch(() => ({ content: [] })),
         notificationApi.getUnreadCount().catch(() => ({ unreadCount: 0 })),
       ]);
       setNotifications(resList.content || []);
       setUnreadCount(resCount.unreadCount || 0);
     } catch {
-      // Quiet fail if guest/unauthenticated
+      // Quiet fail if guest
     }
   };
 
@@ -50,263 +64,340 @@ export const GlobalNavbar: React.FC = () => {
     }
   }, [user]);
 
-  // Close dropdown on outside click or Escape key press
+  // Click outside listener
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setDropdownOpen(false);
+      const target = event.target as Node;
+      if (profileRef.current && !profileRef.current.contains(target)) {
+        setProfileDropdownOpen(false);
       }
-    };
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setDropdownOpen(false);
+      if (moreRef.current && !moreRef.current.contains(target)) {
+        setMoreDropdownOpen(false);
+      }
+      if (notifRef.current && !notifRef.current.contains(target)) {
+        setNotificationOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
-    document.addEventListener('keydown', handleKeyDown);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('keydown', handleKeyDown);
-    };
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleMarkAllAsRead = async () => {
+  const handleMarkAllRead = async () => {
     try {
       await notificationApi.markAllAsRead();
       setNotifications([]);
       setUnreadCount(0);
     } catch (err) {
-      console.error('Failed to mark notifications as read', err);
+      console.error(err);
     }
   };
 
   const handleLogout = () => {
-    setDropdownOpen(false);
     logout();
     navigate('/login');
   };
 
-  // Derive dynamic user initial
-  const userInitial = user?.firstName
-    ? user.firstName.charAt(0).toUpperCase()
-    : user?.email
-    ? user.email.charAt(0).toUpperCase()
-    : 'A';
+  // Derive user display details
+  const displayName = user?.email?.split('@')[0] || 'Nishhz';
+  const formattedName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
+  const initial = formattedName.charAt(0).toUpperCase();
+  const userRole = isOfficer ? 'Club Officer' : (user?.role === 'ADMIN' ? 'President' : 'Club Member');
 
-  const displayName = user?.firstName
-    ? `${user.firstName} ${user.lastName || ''}`.trim()
-    : user?.email
-    ? user.email.split('@')[0]
-    : 'Authenticated User';
-
-  const roleBadgeClass = user?.role === 'ADMIN' ? 'admin' : isOfficer ? 'officer' : 'member';
+  const navItems = [
+    { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
+    { label: 'Meetings', path: '/meetings', icon: Calendar },
+    { label: 'Members', path: '/members', icon: Users },
+    { label: 'Roles & Signups', path: '/meetings', icon: Mic },
+    { label: 'Pathways', path: '/achievements', icon: BookOpen },
+    { label: 'Achievements', path: '/achievements', icon: Trophy },
+    { label: 'Leaderboard', path: '/rankings', icon: BarChart3 },
+    { label: 'Analytics', path: '/analytics', icon: TrendingUp },
+  ];
 
   return (
-    <nav className="global-navbar-container">
-      <div className="global-navbar-inner">
-        {/* Brand Section */}
-        <div className="global-brand" onClick={() => navigate('/dashboard')}>
-          <img
-            src="/assets/rathinam-logo.png"
-            alt="Rathinam Group"
-            className="global-brand-logo"
+    <header className="tm-navbar-header">
+      <div className="tm-navbar-inner">
+        {/* Brand Logo & Tagline */}
+        <NavLink to="/dashboard" className="tm-brand-link">
+          <img 
+            src="/assets/toastmasters-logo.png" 
+            alt="Toastmasters International" 
+            className="tm-brand-logo" 
           />
-          <div>
-            <div className="global-brand-title">Rathinam Toastmasters</div>
+          <div className="tm-brand-text">
+            <span className="tm-brand-name">RATHINAM TOASTMASTERS</span>
+            <span className="tm-brand-motto">Speak • Lead • Grow</span>
           </div>
-          <span className="global-brand-tag">RTC — District 230</span>
-        </div>
+        </NavLink>
 
-        {/* Desktop Horizontal Navigation Links */}
-        <div className="global-nav-links">
-          <NavLink to="/dashboard" className={({ isActive }) => `global-nav-link ${isActive ? 'active' : ''}`}>
-            <LayoutDashboard size={16} />
-            <span>Dashboard</span>
-          </NavLink>
+        {/* Center Desktop Navigation Links */}
+        <nav className="tm-nav-links">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = location.pathname === item.path && 
+              (item.label === 'Members' ? location.pathname.startsWith('/members') : 
+               item.label === 'Meetings' ? location.pathname === '/meetings' : true);
 
-          <NavLink to="/meetings" className={({ isActive }) => `global-nav-link ${isActive ? 'active' : ''}`}>
-            <Calendar size={16} />
-            <span>Meetings</span>
-          </NavLink>
+            return (
+              <NavLink
+                key={item.label}
+                to={item.path}
+                className={({ isActive: matchActive }) => 
+                  `tm-nav-item ${matchActive && (item.label !== 'Roles & Signups' && item.label !== 'Pathways') ? 'active' : ''}`
+                }
+              >
+                <Icon size={16} className="tm-nav-icon" />
+                <span>{item.label}</span>
+              </NavLink>
+            );
+          })}
 
-          <NavLink to="/members" className={({ isActive }) => `global-nav-link ${isActive ? 'active' : ''}`}>
-            <Users size={16} />
-            <span>Members</span>
-          </NavLink>
+          {/* More Menu Dropdown */}
+          <div className="tm-more-container" ref={moreRef}>
+            <button 
+              type="button"
+              className={`tm-nav-item tm-more-btn ${moreDropdownOpen ? 'active' : ''}`}
+              onClick={() => setMoreDropdownOpen(!moreDropdownOpen)}
+            >
+              <MoreHorizontal size={16} className="tm-nav-icon" />
+              <span>More</span>
+            </button>
 
-          <NavLink to="/rankings" className={({ isActive }) => `global-nav-link ${isActive ? 'active' : ''}`}>
-            <Trophy size={16} />
-            <span>Leaderboard</span>
-          </NavLink>
+            {moreDropdownOpen && (
+              <div className="tm-dropdown-menu tm-more-dropdown">
+                <NavLink 
+                  to="/certificates" 
+                  className="tm-dropdown-item"
+                  onClick={() => setMoreDropdownOpen(false)}
+                >
+                  <Award size={16} />
+                  <span>Certificates & Awards</span>
+                </NavLink>
 
-          <NavLink to="/achievements" className={({ isActive }) => `global-nav-link ${isActive ? 'active' : ''}`}>
-            <Award size={16} />
-            <span>Achievements</span>
-          </NavLink>
+                {isOfficer && (
+                  <NavLink 
+                    to="/admin" 
+                    className="tm-dropdown-item"
+                    onClick={() => setMoreDropdownOpen(false)}
+                  >
+                    <ShieldCheck size={16} />
+                    <span>Officer Admin Portal</span>
+                  </NavLink>
+                )}
 
-          <NavLink to="/analytics" className={({ isActive }) => `global-nav-link ${isActive ? 'active' : ''}`}>
-            <BarChart3 size={16} />
-            <span>Analytics</span>
-          </NavLink>
+                <NavLink 
+                  to="/notifications" 
+                  className="tm-dropdown-item"
+                  onClick={() => setMoreDropdownOpen(false)}
+                >
+                  <Bell size={16} />
+                  <span>Notification Center</span>
+                </NavLink>
+              </div>
+            )}
+          </div>
+        </nav>
 
-          {isOfficer && (
-            <NavLink to="/admin" className={({ isActive }) => `global-nav-link ${isActive ? 'active' : ''}`}>
-              <Settings size={16} />
-              <span>Club Management</span>
-            </NavLink>
-          )}
-
-          <NavLink to="/certificates" className={({ isActive }) => `global-nav-link ${isActive ? 'active' : ''}`}>
-            <ShieldCheck size={16} />
-            <span>Certificates</span>
-          </NavLink>
-        </div>
-
-        {/* Top-Right Profile Control (Small Circle Only) */}
-        <div className="global-profile-container" ref={dropdownRef}>
-          <button
-            className="global-profile-avatar-btn"
-            onClick={() => {
-              setDropdownOpen(!dropdownOpen);
-              if (!dropdownOpen) fetchNotifications();
-            }}
-            aria-label="User Profile and Notifications Menu"
-            aria-expanded={dropdownOpen}
+        {/* Right Utility Actions */}
+        <div className="tm-navbar-actions">
+          {/* Search Trigger */}
+          <button 
+            type="button" 
+            className="tm-action-btn"
+            title="Search members or meetings"
+            onClick={() => setSearchModalOpen(true)}
           >
-            <span>{userInitial}</span>
-            {unreadCount > 0 && <span className="global-avatar-badge-dot" />}
+            <Search size={18} />
           </button>
 
-          {/* Integrated Profile & Notifications Dropdown */}
-          {dropdownOpen && (
-            <div className="global-profile-dropdown" role="menu">
-              {/* Section 1: User Profile Header */}
-              <div className="dropdown-user-header">
-                <div className="dropdown-user-avatar">{userInitial}</div>
-                <div>
-                  <div className="dropdown-user-name">{displayName}</div>
-                  <span className={`dropdown-user-role-pill ${roleBadgeClass}`}>
-                    {user?.role || 'MEMBER'}
-                  </span>
-                </div>
-              </div>
+          {/* Notifications Bell */}
+          <div className="tm-notif-container" ref={notifRef}>
+            <button 
+              type="button" 
+              className="tm-action-btn tm-notif-btn"
+              title="Notifications"
+              onClick={() => setNotificationOpen(!notificationOpen)}
+            >
+              <Bell size={18} />
+              {unreadCount > 0 && <span className="tm-notif-badge" />}
+            </button>
 
-              {/* User Email & Account Details */}
-              <div className="dropdown-user-meta">
-                <div className="dropdown-meta-row">
-                  <span>Email:</span>
-                  <span className="dropdown-meta-val">{user?.email}</span>
-                </div>
-                {user?.memberId && (
-                  <div className="dropdown-meta-row">
-                    <span>Member ID:</span>
-                    <span className="dropdown-meta-val">{user.memberId.substring(0, 12)}...</span>
-                  </div>
-                )}
-              </div>
-
-              {/* Section 2: Integrated Notifications */}
-              <div className="dropdown-notifications-block">
-                <div className="dropdown-notifications-header">
-                  <span className="dropdown-notifications-title">
-                    <Bell size={14} color="#38BDF8" />
-                    <span>Notifications ({unreadCount})</span>
-                  </span>
+            {notificationOpen && (
+              <div className="tm-dropdown-menu tm-notif-dropdown">
+                <div className="tm-notif-header">
+                  <span className="tm-notif-title">Notifications</span>
                   {unreadCount > 0 && (
-                    <button className="dropdown-read-all-btn" onClick={handleMarkAllAsRead}>
+                    <button type="button" className="tm-mark-read-btn" onClick={handleMarkAllRead}>
                       Mark all as read
                     </button>
                   )}
                 </div>
 
-                <div className="dropdown-notifications-list">
-                  {notifications.slice(0, 3).map((n) => (
-                    <div key={n.id} className={`dropdown-notification-item ${!n.read ? 'unread' : ''}`}>
-                      <div className="dropdown-notification-title">{n.title}</div>
-                      <div className="dropdown-notification-msg">{n.message}</div>
+                <div className="tm-notif-list">
+                  {notifications.length === 0 ? (
+                    <div className="tm-notif-empty">
+                      <CheckCircle2 size={24} color="#10B981" />
+                      <p>You're all caught up!</p>
                     </div>
-                  ))}
-
-                  {notifications.length === 0 && (
-                    <div style={{ textAlign: 'center', color: '#64748B', fontSize: '0.78rem', padding: '8px 0' }}>
-                      No unread notifications.
-                    </div>
+                  ) : (
+                    notifications.map((n) => (
+                      <div key={n.id} className="tm-notif-item">
+                        <div className="tm-notif-item-title">{n.title}</div>
+                        <div className="tm-notif-item-msg">{n.message}</div>
+                      </div>
+                    ))
                   )}
                 </div>
 
-                <NavLink
-                  to="/notifications"
-                  className="dropdown-view-all-link"
-                  onClick={() => setDropdownOpen(false)}
+                <NavLink 
+                  to="/notifications" 
+                  className="tm-notif-footer"
+                  onClick={() => setNotificationOpen(false)}
                 >
-                  View all notifications →
+                  View all notifications
                 </NavLink>
               </div>
+            )}
+          </div>
 
-              {/* Section 3: Logout Action */}
-              <button className="dropdown-logout-btn" onClick={handleLogout}>
-                <LogOut size={16} />
-                <span>Sign Out</span>
-              </button>
-            </div>
-          )}
+          {/* User Profile Chip */}
+          <div className="tm-profile-container" ref={profileRef}>
+            <button 
+              type="button" 
+              className="tm-profile-chip"
+              onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+            >
+              <div className="tm-profile-avatar">
+                {initial}
+              </div>
+              <div className="tm-profile-meta">
+                <span className="tm-profile-name">{formattedName}</span>
+                <span className="tm-profile-role">{userRole}</span>
+              </div>
+              <ChevronDown size={14} className="tm-profile-caret" />
+            </button>
 
-          {/* Mobile Navigation Drawer Toggle */}
-          <button
-            className="mobile-nav-toggle"
+            {profileDropdownOpen && (
+              <div className="tm-dropdown-menu tm-profile-dropdown">
+                <div className="tm-profile-menu-header">
+                  <div className="tm-menu-avatar">{initial}</div>
+                  <div>
+                    <div className="tm-menu-name">{formattedName}</div>
+                    <div className="tm-menu-email">{user?.email}</div>
+                  </div>
+                </div>
+
+                <div className="tm-dropdown-divider" />
+
+                <NavLink 
+                  to="/members" 
+                  className="tm-dropdown-item"
+                  onClick={() => setProfileDropdownOpen(false)}
+                >
+                  <Users size={16} />
+                  <span>Club Directory</span>
+                </NavLink>
+
+                <NavLink 
+                  to="/achievements" 
+                  className="tm-dropdown-item"
+                  onClick={() => setProfileDropdownOpen(false)}
+                >
+                  <Trophy size={16} />
+                  <span>My Achievements</span>
+                </NavLink>
+
+                {isOfficer && (
+                  <NavLink 
+                    to="/admin" 
+                    className="tm-dropdown-item"
+                    onClick={() => setProfileDropdownOpen(false)}
+                  >
+                    <ShieldCheck size={16} />
+                    <span>Officer Portal</span>
+                  </NavLink>
+                )}
+
+                <div className="tm-dropdown-divider" />
+
+                <button 
+                  type="button" 
+                  className="tm-dropdown-item tm-logout-item"
+                  onClick={handleLogout}
+                >
+                  <LogOut size={16} />
+                  <span>Sign Out</span>
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Mobile Hamburger Toggle */}
+          <button 
+            type="button"
+            className="tm-mobile-toggle"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle navigation menu"
           >
-            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
       </div>
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div style={{
-          background: 'rgba(10, 16, 28, 0.98)',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-          padding: '16px 24px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 10
-        }}>
-          <NavLink to="/dashboard" className="global-nav-link" onClick={() => setMobileMenuOpen(false)}>
-            <LayoutDashboard size={18} /> <span>Dashboard</span>
-          </NavLink>
-
-          <NavLink to="/meetings" className="global-nav-link" onClick={() => setMobileMenuOpen(false)}>
-            <Calendar size={18} /> <span>Meetings</span>
-          </NavLink>
-
-          <NavLink to="/members" className="global-nav-link" onClick={() => setMobileMenuOpen(false)}>
-            <Users size={18} /> <span>Members</span>
-          </NavLink>
-
-          <NavLink to="/rankings" className="global-nav-link" onClick={() => setMobileMenuOpen(false)}>
-            <Trophy size={18} /> <span>Leaderboard</span>
-          </NavLink>
-
-          <NavLink to="/achievements" className="global-nav-link" onClick={() => setMobileMenuOpen(false)}>
-            <Award size={18} /> <span>Achievements</span>
-          </NavLink>
-
-          <NavLink to="/analytics" className="global-nav-link" onClick={() => setMobileMenuOpen(false)}>
-            <BarChart3 size={18} /> <span>Analytics</span>
-          </NavLink>
-
-          {isOfficer && (
-            <NavLink to="/admin" className="global-nav-link" onClick={() => setMobileMenuOpen(false)}>
-              <Settings size={18} /> <span>Club Management</span>
-            </NavLink>
-          )}
-
-          <NavLink to="/certificates" className="global-nav-link" onClick={() => setMobileMenuOpen(false)}>
-            <ShieldCheck size={18} /> <span>Certificates</span>
-          </NavLink>
+        <div className="tm-mobile-menu">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <NavLink
+                key={item.label}
+                to={item.path}
+                className="tm-mobile-item"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <Icon size={18} />
+                <span>{item.label}</span>
+              </NavLink>
+            );
+          })}
+          <div className="tm-dropdown-divider" />
+          <button type="button" className="tm-mobile-item tm-logout-item" onClick={handleLogout}>
+            <LogOut size={18} />
+            <span>Sign Out</span>
+          </button>
         </div>
       )}
-    </nav>
+
+      {/* Quick Search Modal */}
+      {searchModalOpen && (
+        <div className="tm-search-backdrop" onClick={() => setSearchModalOpen(false)}>
+          <div className="tm-search-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="tm-search-input-wrap">
+              <Search size={20} color="#64748B" />
+              <input 
+                type="text"
+                autoFocus
+                placeholder="Quick search members, meetings, or pathways..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    setSearchModalOpen(false);
+                    navigate(`/members?search=${encodeURIComponent(searchQuery)}`);
+                  }
+                }}
+              />
+              <button 
+                type="button" 
+                className="tm-search-close"
+                onClick={() => setSearchModalOpen(false)}
+              >
+                <X size={18} />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </header>
   );
 };
